@@ -37,6 +37,7 @@ export default function Register(){
             <input type="password" placeholder="password" onChange={handleChange} name="password"/>
             <input type="password" placeholder="Confirm Password" onChange={handleChange} name="confirmpassword"/>
             <button type="submit">Register</button>
+            <button onClick={() => navigate('/login')}>Already registered? Login</button>
         </form>
     )
 

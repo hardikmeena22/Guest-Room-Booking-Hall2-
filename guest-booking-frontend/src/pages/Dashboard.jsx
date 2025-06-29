@@ -18,7 +18,6 @@ return(
     <div className='Navbar'>
         <button onClick={() => navigate('/booking')}>📅 Book a Room</button>
         <button onClick={() => navigate('/my-bookings')}>📄 My Bookings</button>
-        <button onClick={() => navigate('/available-rooms')}>🏠 Available Rooms</button>
         <button onClick={() => {
           localStorage.removeItem("token");
           navigate('/login');
