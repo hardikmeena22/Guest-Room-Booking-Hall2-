@@ -2,15 +2,27 @@ const express = require('express');
 const router = express.Router();
 const Booking = require('../models/Booking');
 const { route } = require('./auth');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'MasterPassword123'
+
 
 
 router.post('/', async (req, res) => {
-    const { userId, room_no, start_date, end_date, purpose } = req.body;
+    const {token, room_no, start_date, end_date, purpose } = req.body;
   
-    if (!userId || !room_no || !start_date || !end_date) {
+    if (!token || !room_no || !start_date || !end_date) {
       return res.status(400).json({ msg: 'Please fill all required fields' });
     }
 
+    
+  let decoded;
+  try {
+    decoded = jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    return res.status(401).json({ msg: 'Invalid or expired token' });
+  }
+
+  const userId = decoded.id;
     try{
         const newBooking = new Booking({
             user: userId,
@@ -20,7 +32,7 @@ router.post('/', async (req, res) => {
             purpose
           })
           const existingBooking = await Booking.findOne({
-            room_number,
+            room_no,
             $or: [
               {
                 start_date: { $lte: new Date(end_date) },
@@ -41,9 +53,11 @@ router.post('/', async (req, res) => {
   }
 
         })
-        router.get('/user/:id', async (req, res) => {
+        router.get('/user/', async (req, res) => {
+          const token = req.headers.authorization?.split(' ')[1];
             try {
-              const bookings = await Booking.find({ user: req.params.id }).sort({ createdAt: -1 });
+              const decoded = jwt.verify(token, "MasterPassword123" )
+              const bookings = await Booking.find({ user: decoded.id }).sort({ createdAt: -1 });
               res.json(bookings);
             } catch (err) {
               console.error('❌ Fetch error:', err);
@@ -87,15 +101,18 @@ router.post('/', async (req, res) => {
               const allRooms = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
           
               const bookedRooms = await Booking.find({
-                $or: [
-                  {
+                
+                  
                     start_date: { $lte: new Date(end) },
                     end_date: { $gte: new Date(start) }
-                  }
-                ]
-              }).distinct('room_number');
+                  
+                
+              }).distinct('room_no');
           
               const availableRooms = allRooms.filter(room => !bookedRooms.includes(room));
+              console.log("bookedRooms:", bookedRooms);
+console.log("allRooms:", allRooms);
+console.log("availableRooms:", availableRooms);
           
               res.json({ availableRooms });
             } catch (err) {

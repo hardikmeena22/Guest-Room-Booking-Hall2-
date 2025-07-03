@@ -1,14 +1,14 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(express.json())
 const mongoose = require('mongoose')
+app.use(cors({origin: 'http://localhost:5173'}))
 const bookingRoutes = require('./routes/booking');
-app.use('/api/bookings', bookingRoutes)
+app.use('/api/booking', bookingRoutes)
 
-require('dotenv').config()
 console.log("🌐 Using Mongo URI:", process.env.MONGO_URI)
-app.use(cors())
 
 mongoose.connect(process.env.MONGO_URI, {
   dbName: 'guest_room_Hall_2', // 🔥 this forces the DB!

@@ -1,21 +1,2 @@
-.register-Form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    padding: 5px;
-    gap: 10px;
+@import "tailwindcss";
 
-}
-
-.login-Form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    padding: 5px;
-    gap: 10px;
-
-}
