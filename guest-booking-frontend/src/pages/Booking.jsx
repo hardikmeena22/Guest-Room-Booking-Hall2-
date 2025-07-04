@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css'; 
 
 export default function BookingPage() {
+  const backendURL = import.meta.env.VITE_BACKEND_URL
   const [query] = useSearchParams()
   const room = query.get("room");
   const [from, setFrom] = useState();

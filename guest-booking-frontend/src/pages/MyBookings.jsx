@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-const backendURL = import.meta.env.VITE_BACKEND_URL
 
 export default function MyBookings() {
+  const backendURL = import.meta.env.VITE_BACKEND_URL
   const [bookings, setBookings] = useState([]);
   const token = localStorage.getItem("token")
   const navigate= useNavigate()
@@ -11,7 +11,7 @@ export default function MyBookings() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const res = await axios.get(`/api/booking/user`, {
+        const res = await axios.get(`${backendURL}/api/booking/user`, {
           headers: {
             Authorization: `Bearer ${token}`
       }});

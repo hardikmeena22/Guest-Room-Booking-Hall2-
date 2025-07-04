@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function AvailableRooms() {
+  const backendURL = import.meta.env.VITE_BACKEND_URL
   const location = useLocation();
   const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
@@ -14,7 +15,7 @@ export default function AvailableRooms() {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const res = await axios.get(`/api/booking/available?start=${start}&end=${end}`);
+      const res = await axios.get(`${backendURL}/api/booking/available?start=${start}&end=${end}`);
       console.log('Available rooms response:', res.data)
       setRooms(res.data.availableRooms || []);
     };

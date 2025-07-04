@@ -3,6 +3,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 export default function Login(){
+    const backendURL = import.meta.env.VITE_BACKEND_URL
     const [formData, setFormData] = useState({ email: '', password: ''})
     const navigate = useNavigate()
 
@@ -16,7 +17,7 @@ export default function Login(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const res = await axios.post("/api/auth/login", {
+            const res = await axios.post(`${backendURL}/api/auth/login`, {
                 email: formData.email,
                 password: formData.password
             })

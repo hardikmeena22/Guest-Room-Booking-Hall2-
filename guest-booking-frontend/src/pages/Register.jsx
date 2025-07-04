@@ -8,12 +8,13 @@ export default function Register(){
     // prevent accidental auto-login
     localStorage.removeItem('token');
   }, [])
+  const backendURL = import.meta.env.VITE_BACKEND_URL
     const navigate = useNavigate()
     const [formData, setFormData] = useState({name: '', email: '', password: '', confirmpassword: '' ,roll_no: '', otp: ''})
     const [otpSent, setOtpSent] = useState(false)
     const handleSendOtp = async () => {
         try {
-          await axios.post('/api/auth/send-otp', { email: formData.email });
+          await axios.post(`${backendURL}/api/auth/send-otp`, { email: formData.email });
           toast.success("OTP sent to your email!");
           setOtpSent(true); // this line is critical
         } catch (err) {

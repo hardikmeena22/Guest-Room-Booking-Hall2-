@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function ConfirmBooking() {
+  const backendURL = import.meta.env.VITE_BACKEND_URL
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
@@ -23,7 +24,7 @@ export default function ConfirmBooking() {
     if (!confirmed) return;
 
     try {
-      const res = await axios.post("/api/booking", {
+      const res = await axios.post(`${backendURL}/api/booking`, {
         token,
         room_no: room,
         start_date: start,
