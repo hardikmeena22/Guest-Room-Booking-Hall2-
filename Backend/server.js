@@ -4,7 +4,10 @@ const cors = require('cors')
 const app = express()
 app.use(express.json())
 const mongoose = require('mongoose')
-app.use(cors({origin: 'http://localhost:5173'}))
+app.use(cors({
+  origin:['https://guest-room-booking-hall2.vercel.app'],
+  credentials:true,
+}))
 const bookingRoutes = require('./routes/booking');
 app.use('/api/booking', bookingRoutes)
 
