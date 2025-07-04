@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const app = express();
 
 app.use(cors())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 console.log("🌐 Using Mongo URI:", process.env.MONGO_URI);
 
