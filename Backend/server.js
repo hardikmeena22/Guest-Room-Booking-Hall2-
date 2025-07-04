@@ -32,7 +32,7 @@ app.use('/api/auth', authRoutes)
 
 
 const uri = process.env.MONGO_URI
-const PORT = 5000
+const PORT = process.env.PORT || 5000
 console.log("🧪 Connecting to:", process.env.MONGO_URI)
 app.get('/ping', (req, res) => {
     console.log('✅ /ping hit');

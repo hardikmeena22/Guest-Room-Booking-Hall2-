@@ -44,14 +44,14 @@ export default function Register(){
     
       try {
         // 🔍 Check if user already exists first
-        const checkRes = await axios.post("/api/auth/check-user", { email: formData.email });
+        const checkRes = await axios.post(`${backendURL}/api/auth/check-user`, { email: formData.email });
         if (checkRes.data.exists) {
           toast.error("User already registered");
           return;
         }
     
         // ✅ Then verify OTP
-        const otpRes = await axios.post('/api/auth/verify-otp', {
+        const otpRes = await axios.post(`${backendURL}/api/auth/verify-otp`, {
           email: formData.email,
           otp: formData.otp,
         });
@@ -62,7 +62,7 @@ export default function Register(){
         }
     
         // 📝 Finally register the user
-        const res = await axios.post("/api/auth/register", formData);
+        const res = await axios.post(`${backendURL}/api/auth/register`, formData);
         toast.success('User registered successfully!');
         navigate("/login");
     
