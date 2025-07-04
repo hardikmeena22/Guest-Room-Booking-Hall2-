@@ -4,16 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 
-const corsOptions = {
-  origin: true,
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
-// ✅ Explicitly handle preflight
-app.options('*', cors(corsOptions));
-
-app.use(express.json());
+app.use(cors())
 
 console.log("🌐 Using Mongo URI:", process.env.MONGO_URI);
 
