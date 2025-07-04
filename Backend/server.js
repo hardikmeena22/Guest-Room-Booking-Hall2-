@@ -1,9 +1,12 @@
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
-const app = express()
-app.use(express.json())
-const mongoose = require('mongoose')
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const app = express();
+
+app.use(express.json());
+
+// ✅ Put CORS at the top, before routes!
 const allowedOrigins = [
   'http://localhost:5173',
   'https://guest-room-booking-hall2.vercel.app'
@@ -11,7 +14,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow requests like curl or Postman
+    if (!origin) return callback(null, true); // allow non-browser clients like Postman
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
@@ -19,32 +22,29 @@ app.use(cors({
     }
   },
   credentials: true
-}))
-const bookingRoutes = require('./routes/booking');
-app.use('/api/booking', bookingRoutes)
+}));
 
-console.log("🌐 Using Mongo URI:", process.env.MONGO_URI)
+console.log("🌐 Using Mongo URI:", process.env.MONGO_URI);
 
 mongoose.connect(process.env.MONGO_URI, {
-  dbName: 'guest_room_Hall_2', // 🔥 this forces the DB!
-
+  dbName: 'guest_room_Hall_2'
 })
 .then(() => console.log("✅ MongoDB connected successfully"))
-.catch((err) => console.error("❌ MongoDB connection error:", err))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
 
-const authRoutes = require('./routes/auth')
+const bookingRoutes = require('./routes/booking');
+const authRoutes = require('./routes/auth');
 
+app.use('/api/booking', bookingRoutes);
+app.use('/api/auth', authRoutes);
 
-app.use('/api/auth', authRoutes)
-
-
-const uri = process.env.MONGO_URI
-const PORT = process.env.PORT || 5000
-console.log("🧪 Connecting to:", process.env.MONGO_URI)
 app.get('/ping', (req, res) => {
-    console.log('✅ /ping hit');
-    res.send('pong');
-  })
+  console.log('✅ /ping hit');
+  res.send('pong');
+});
 
-app.listen(PORT, () => {console.log(`the server is successfully running on port ${PORT}`)})
-
+// ✅ Important: Use process.env.PORT
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
