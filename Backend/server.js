@@ -11,31 +11,23 @@ const allowedOrigins = [
   'https://guest-room-booking-hall2.vercel.app'
 ];
 
-// ✅ Put at the very top for preflight handling
-app.options('*', cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+      callback(null, true);
     } else {
-      return callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
-}));
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 
-// ✅ Main CORS middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+app.use(cors(corsOptions));
+
+// ✅ Explicitly handle preflight
+app.options('*', cors(corsOptions));
 
 console.log("🌐 Using Mongo URI:", process.env.MONGO_URI);
 
@@ -52,7 +44,6 @@ app.use('/api/booking', bookingRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/ping', (req, res) => {
-  console.log('✅ /ping hit');
   res.send('pong');
 });
 
