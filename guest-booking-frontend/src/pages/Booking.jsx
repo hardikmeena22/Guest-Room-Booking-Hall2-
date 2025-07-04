@@ -23,7 +23,7 @@ image.png
 
   return (
     <>
-          <div className='  flex m-1 p-1 items-center  justify-center gap-4 md:gap-8 lg:sticky top-0 gap-40 h-20 bg-white shadow-lg'
+          <div className=' sticky top-0 flex m-1 p-1 items-center  justify-center gap-4 md:gap-8 lg:gap-40 h-20 bg-white shadow-lg whitespace-nowrap'
       >
         <button className = "font-semibold space-x-20  hover:text-gray-700 hover:cursor-pointer transition-all duration-150" onClick={() => navigate('/dashboard')}>Dashboard </button>
         <button>|</button> 
