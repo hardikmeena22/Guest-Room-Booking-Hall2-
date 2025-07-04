@@ -6,15 +6,28 @@ const app = express();
 
 app.use(express.json());
 
-// ✅ Put CORS at the top, before routes!
 const allowedOrigins = [
   'http://localhost:5173',
   'https://guest-room-booking-hall2.vercel.app'
 ];
 
+// ✅ Put at the very top for preflight handling
+app.options('*', cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+// ✅ Main CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser clients like Postman
+    if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
@@ -43,7 +56,6 @@ app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
-// ✅ Important: Use process.env.PORT
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
