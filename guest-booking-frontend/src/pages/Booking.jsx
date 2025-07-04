@@ -17,19 +17,19 @@ export default function BookingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     navigate(`/available-rooms?start=${from}&end=${to}&purpose=${purpose}`)
-
+image.png
    
   };
 
   return (
     <>
-          <div className=' sticky top-0 flex m-1 p-1 items-center  justify-center gap-4 md:gap-8 lg:gap-40 h-20 bg-white shadow-lg'
+          <div className='  flex m-1 p-1 items-center  justify-center gap-4 md:gap-8 lg:sticky top-0 gap-40 h-20 bg-white shadow-lg'
       >
         <button className = "font-semibold space-x-20  hover:text-gray-700 hover:cursor-pointer transition-all duration-150" onClick={() => navigate('/dashboard')}>Dashboard </button>
         <button>|</button> 
-        <button className = "font-semibold space-x-20 hover:text-lg hover:text-green-800 hover:cursor-pointer transition-all duration-150" onClick={() => navigate('/booking')}>📅 Book a Room </button>
+        <button className = "font-semibold space-x-20 hover:text-lg hover:text-green-800 hover:cursor-pointer transition-all duration-150 whitespace-nowrap" onClick={() => navigate('/booking')}>📅 Book a Room </button>
         <button>|</button> 
-        <button className = "font-semibold hover:text-lg hover:text-green-800 hover:cursor-pointer transition-all duration-150 " onClick={() => navigate('/my-bookings')}>📄 My Bookings</button>
+        <button className = "font-semibold hover:text-lg hover:text-green-800 hover:cursor-pointer transition-all duration-150 whitespace-nowrap " onClick={() => navigate('/my-bookings')}>📄 My Bookings</button>
         <button>|</button>
         <button className = "font-semibold place-items-end hover:text-red-500 transition-colors duration-100" onClick={() => {
           localStorage.removeItem("token");
@@ -37,11 +37,11 @@ export default function BookingPage() {
         }}>🚪 Logout</button>
     </div>
     
-      <h2 className='flex justify-center sitems-center text-2xl mt-10 '>Room Booking Portal{room}</h2>
-      <h2 className='flex justify-center sitems-center text-2xl mt-5 '>Select Dates</h2>
+      <h2 className='flex justify-center items-center text-2xl mt-10 '>Room Booking Portal{room}</h2>
+      <h2 className='flex justify-center items-center text-2xl mt-5 '>Select Dates</h2>
       <form onSubmit={handleSubmit}>
-        <div className='flex items-center justify-center'>
-        <div className='flex flex-col items-center justify-center mt-10 p-5'> 
+        <div className='flex flex-col md:flex-row items-start justify-center gap-6 w-full px-4'>
+        <div className='flex flex-col items-center w-full max-w-xs'> 
         <p className='mr-75 mb-5 font-semibold text-lg'>From:</p>
         <DayPicker mode="single"
         selected={from}
@@ -54,7 +54,7 @@ export default function BookingPage() {
         }}
       />
     </div>
-        <div className='flex flex-col items-center justify-center mt-10 p-5' >  
+        <div className='flex flex-col items-center w-full max-w-xs' >  
         <p className='mr-75 mb-5 font-semibold text-lg'>To:</p>
         <DayPicker mode="single"
         selected={to}
