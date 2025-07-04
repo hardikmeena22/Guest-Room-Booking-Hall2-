@@ -14,7 +14,7 @@ export default function AvailableRooms() {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const res = await axios.get(`http://localhost:5000/api/booking/available?start=${start}&end=${end}`);
+      const res = await axios.get(`/api/booking/available?start=${start}&end=${end}`);
       console.log('Available rooms response:', res.data)
       setRooms(res.data.availableRooms || []);
     };

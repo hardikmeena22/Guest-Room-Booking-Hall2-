@@ -10,7 +10,7 @@ export default function MyBookings() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/booking/user`, {
+        const res = await axios.get(`/api/booking/user`, {
           headers: {
             Authorization: `Bearer ${token}`
       }});

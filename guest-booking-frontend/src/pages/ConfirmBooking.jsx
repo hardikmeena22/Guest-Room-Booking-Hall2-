@@ -23,7 +23,7 @@ export default function ConfirmBooking() {
     if (!confirmed) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/api/booking", {
+      const res = await axios.post("/api/booking", {
         token,
         room_no: room,
         start_date: start,

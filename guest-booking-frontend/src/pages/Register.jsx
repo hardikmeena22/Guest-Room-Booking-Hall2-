@@ -43,7 +43,7 @@ export default function Register(){
     
       try {
         // 🔍 Check if user already exists first
-        const checkRes = await axios.post("http://localhost:5000/api/auth/check-user", { email: formData.email });
+        const checkRes = await axios.post("/api/auth/check-user", { email: formData.email });
         if (checkRes.data.exists) {
           toast.error("User already registered");
           return;
@@ -61,7 +61,7 @@ export default function Register(){
         }
     
         // 📝 Finally register the user
-        const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+        const res = await axios.post("/api/auth/register", formData);
         toast.success('User registered successfully!');
         navigate("/login");
     
