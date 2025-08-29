@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css'; 
-
+import toast from 'react-hot-toast';
 export default function BookingPage() {
   const backendURL = import.meta.env.VITE_BACKEND_URL
   const [query] = useSearchParams()
@@ -16,10 +16,17 @@ export default function BookingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!from || !to) {
+      toast.error("Please select both start and end dates.");
+      return;}
+    
     navigate(`/available-rooms?start=${from}&end=${to}&purpose=${purpose}`)
 image.png
    
   };
+  const today = new Date();
+today.setHours(0, 0, 0, 0);
+
 
   return (
     <>
@@ -43,12 +50,15 @@ image.png
         <div className='flex flex-col md:flex-row items-start justify-center gap-6 w-full px-4'>
         <div className='flex flex-col items-center w-full max-w-xs'> 
         <p className='mr-75 mb-5 font-semibold text-lg'>From:</p>
-        <DayPicker mode="single"
+        <DayPicker  mode="single"
+        captionLayout='dropdown'
         selected={from}
         onSelect={(date) => {
           setFrom(date)
           setTo(undefined)
         }}
+        disabled = {{before: today,
+          after: new Date(new Date().setDate(new Date().getDate() + 38))}}
         classNames={{
           month: "border-2 border-black rounded-lg p-5  shadow"
         }}
@@ -60,10 +70,14 @@ image.png
         selected={to}
         onSelect={setTo}
         disabled={[
-          { before: from },
-        {
-          after: from
-            ? new Date(new Date(from).setDate(new Date(from).getDate() + 6)) // max 7 days including from date
+          { before: from,
+             after: from
+            ? new Date(
+                Math.min(
+                  new Date(from).setDate(new Date(from).getDate() + 6), // 7-day max
+                  new Date().setDate(new Date().getDate() + 38)         // global max
+                )
+              )
             : undefined,
         }
       ]}

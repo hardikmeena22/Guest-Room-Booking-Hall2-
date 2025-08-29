@@ -22,6 +22,27 @@ export default function MyBookings() {
     };
     fetchBookings();
   }, [token]);
+  const handleCancelBooking = async (id) => {
+    if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+  
+    try {
+      const res = await axios.delete(`${backendURL}/api/booking/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      alert(res.data.msg);
+  
+      // Remove from UI
+      setBookings((prev) => prev.filter((b) => b._id !== id));
+  
+    } catch (err) {
+      console.error("❌ Error cancelling booking:", err);
+      alert(err.response?.data?.msg || "Failed to cancel booking");
+    }
+  };
+  
 
   return (
     <div>
@@ -64,6 +85,13 @@ export default function MyBookings() {
           <p className="text-sm text-gray-600">
             <span className="font-medium">Purpose:</span> {booking.purpose}
           </p>
+          <button
+  onClick={() => handleCancelBooking(booking._id)}
+  className="mt-3 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+>
+  Cancel
+</button>
+
         </div>
       ))}
     </div>

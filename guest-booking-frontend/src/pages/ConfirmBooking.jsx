@@ -20,7 +20,7 @@ export default function ConfirmBooking() {
     }
 
 
-    const confirmed = window.confirm("₹400 will be added to your mess bill. Proceed?");
+    const confirmed = window.confirm("Confirm Booking?");
     if (!confirmed) return;
 
     try {
@@ -53,7 +53,7 @@ export default function ConfirmBooking() {
       </div>
       <p className='mb-20 mt-20  '><span className='font-semibold text-lg'> Purpose: </span> {purpose}</p>
       <div className="mb-10 bg-red-200 text-yellow-800 border border-yellow-300 px-4 py-2 rounded-md shadow-sm text-center max-w-md">
-  ₹400 will be added to your mess bill.
+  Please check all details carefully.
 </div>
      
     </div>

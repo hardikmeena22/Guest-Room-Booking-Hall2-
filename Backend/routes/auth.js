@@ -2,12 +2,90 @@ const express = require('express')
 const User = require('../models/User')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs'); // or 'bcrypt'
+const bcrypt = require('bcryptjs')
 const Otp = require('../models/Otp')
 const sendOTP = require('../utils/sendOTP')
+const nodemailer = require('nodemailer');
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://guest-room-booking-hall2.vercel.app";
+
+// Create reusable transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Forgot Password Route
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email is required" });
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Do not reveal
+      return res.json({ message: "If this email is registered, a reset link has been sent." });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    const resetLink = `${FRONTEND_URL}/reset-password/${token}`;
+
+    // Send actual email
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Reset your password for Guest Room Booking Portal",
+      html: `
+        <p>Hi ${user.name || 'user'},</p>
+        <p>You requested to reset your password. Click the link below to set a new password:</p>
+        <a href="${resetLink}">Reset Password</a>
+        <p>This link is valid for 1 hour.</p>
+        <p>If you didn't request this, please ignore this email.</p>
+      `,
+    });
+
+    res.json({ message: "If this email is registered, a reset link has been sent." });
+  } catch (err) {
+    console.error("Forgot password error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Reset Password Route
+router.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res.status(400).json({ message: "Token and new password required" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(400).json({ message: "Invalid token or user not found" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: "Password reset successfully" });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    res.status(400).json({ message: "Invalid or expired token" });
+  }
+});
 
 
 router.post('/send-otp', async (req, res) => {
+ 
   const rawEmail = req.body.email;
   console.log("📥 Incoming raw email:", rawEmail);
 
@@ -23,11 +101,14 @@ router.post('/send-otp', async (req, res) => {
     console.log("❌ Rejected: Not IITK email");
     return res.status(400).json({ message: 'Only IITK emails allowed.' });
   }
-
+  const existingUser = await User.findOne({ email })
+  if (existingUser) {
+    return res.status(400).json({ message: "User already registered" });
+  }
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // valid for 10 mins
 
-  // Remove any existing OTPs for this email
+ 
   await Otp.deleteMany({ email })
   const newOtp = new Otp({
     email,
@@ -73,7 +154,7 @@ if (record.otp !== otp) {
   return res.status(400).json({ message: 'Invalid OTP.' });
 }
 
-// OTP is valid, delete it
+
 await Otp.deleteOne({ email });
 
 res.json({ message: 'OTP verified successfully!' });
@@ -84,7 +165,7 @@ res.json({ message: 'OTP verified successfully!' });
 });
 
 
-router.post('/register', async(req,res)=> {
+router.post('/register', async(req,res) => {
   
     console.log("🔥 Route entered")
     const {name, roll_no, email, password} = req.body

@@ -9,6 +9,8 @@ import Booking from './pages/Booking'
 import AvailableRooms from './pages/AvailableRooms'
 import MyBookings from './pages/MyBookings'
 import ConfirmBooking from './pages/ConfirmBooking'
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword"
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
     <Route path="/available-rooms" element={<AvailableRooms/>} />
     <Route path="/my-bookings" element={<MyBookings />} />
     <Route path="/confirm-booking" element={<ConfirmBooking />} />
+    <Route path="/forgot-password" element={<ForgotPassword />} />
+<Route path="/reset-password/:token" element={<ResetPassword />} />
   </Routes>
      <Toaster />
      

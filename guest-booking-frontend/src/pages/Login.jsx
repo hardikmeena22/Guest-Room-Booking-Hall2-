@@ -42,13 +42,23 @@ export default function Login(){
           <h2 className="mb-15 text-lg"  style={{ fontFamily: '"Edu SA Hand", cursive' }}>Please Enter Your Login Details</h2>  
         <input className="border border-black-400 rounded-3xl mb-6 hover:bg-slate-100 p-2 " type="email" placeholder="👤 Email" onChange={handleChange} name="email"/>
         <input className="border border-black-400 rounded-3xl mb-8 hover:bg-slate-100 p-2 " type="password" placeholder="🔒 password" onChange={handleChange} name="password"/>
+        <button
+  className="hover:cursor-pointer mb-4 text-pink-500 hover:text-pink-700 text-lg"
+  onClick={() => {
+    setFormData({ email: '', password: '' }); 
+    localStorage.removeItem("token");
+    navigate('/forgot-password');
+  }}
+>
+ Forgot Password
+</button>
         <button className= "flex bg-pink-500 hover:bg-pink-600 text-gray-200 p-1 rounded px-7 hover:cursor-pointer mb-4" type="submit">Login</button>
         <h2 className="mb-5">-OR-</h2>
         <button
   className="hover:cursor-pointer mb-4 text-pink-500 hover:text-pink-700 text-lg"
   onClick={() => {
-    setFormData({ email: '', password: '' }); // clear login state
-    localStorage.removeItem("token"); // clear any existing token
+    setFormData({ email: '', password: '' }); 
+    localStorage.removeItem("token"); 
     navigate('/register');
   }}
 >

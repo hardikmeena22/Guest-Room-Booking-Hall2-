@@ -39,9 +39,7 @@ return(
         <ol className='list-decimal list-inside bg-white rounded-xl shadow-lg space-y-15 p-10 py-30  text-lg m-10' >
         <li><span className='font-semibold underline'>Booking Methods:</span> Rooms can be booked either online via this portal or in person at the Hall Office.</li>
         <li><span className='font-semibold underline'>Duration Limit:</span> Guests cannot stay for more than 7 consecutive days. Please plan your booking accordingly.</li>
-        <li><span className='font-semibold underline'>Billing Policy:</span> The room charges will be automatically added to your monthly mess bill. Ensure you have no outstanding dues.
-
-</li>
+        <li><span className='font-semibold underline'>Billing Policy:</span> Upon arrival, guests are required to visit the Hall Office to complete the payment process.</li>
         <li><span className='font-semibold underline'>Guest Restrictions:</span> Female parents and siblings are not permitted to stay in the guest room, as per hostel policy.</li>
         <li><span className='font-semibold underline'>ID Verification:</span> Guests may be asked to present a valid government-issued ID upon arrival. Please ensure they carry one.</li>
        

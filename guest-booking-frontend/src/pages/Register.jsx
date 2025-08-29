@@ -12,16 +12,28 @@ export default function Register(){
     const navigate = useNavigate()
     const [formData, setFormData] = useState({name: '', email: '', password: '', confirmpassword: '' ,roll_no: '', otp: ''})
     const [otpSent, setOtpSent] = useState(false)
+    const [resendTimer, setResendTimer] = useState(0)
     const handleSendOtp = async () => {
+      if (resendTimer > 0) return
         try {
-          await axios.post(`${backendURL}/api/auth/send-otp`, { email: formData.email });
-          toast.success("OTP sent to your email!");
-          setOtpSent(true); // this line is critical
+          const res = await axios.post(`${backendURL}/api/auth/send-otp`, { email: formData.email });
+          if(res.status===200){toast.success("OTP sent to your email!");
+          setOtpSent(true); 
+          setResendTimer(30)}
         } catch (err) {
           toast.error("Failed to send OTP.");
           console.error(err);
         }
       }
+      useEffect(() => {
+        if (resendTimer <= 0) return;
+      
+        const interval = setInterval(() => {
+          setResendTimer((prev) => prev - 1);
+        }, 1000);
+      
+        return () => clearInterval(interval);
+      }, [resendTimer])
     const handleChange = (e) => {
         setFormData({
             ...formData, [e.target.name]: e.target.name === 'roll_no' ? Number(e.target.value) : e.target.value
@@ -43,14 +55,14 @@ export default function Register(){
       }
     
       try {
-        // 🔍 Check if user already exists first
+       
         const checkRes = await axios.post(`${backendURL}/api/auth/check-user`, { email: formData.email });
         if (checkRes.data.exists) {
           toast.error("User already registered");
           return;
         }
     
-        // ✅ Then verify OTP
+
         const otpRes = await axios.post(`${backendURL}/api/auth/verify-otp`, {
           email: formData.email,
           otp: formData.otp,
@@ -61,7 +73,7 @@ export default function Register(){
           return;
         }
     
-        // 📝 Finally register the user
+       
         const res = await axios.post(`${backendURL}/api/auth/register`, formData);
         toast.success('User registered successfully!');
         navigate("/login");
@@ -84,12 +96,14 @@ export default function Register(){
  <input className="border border-black-400 rounded-3xl mb-6 hover:bg-slate-100 p-2 " type="email" placeholder="👤 Email" onChange={handleChange} name="email"/>
             <input className="border border-black-400 rounded-3xl mb-6 hover:bg-slate-100 p-2 " type="password" placeholder="🔒 password" onChange={handleChange} name="password"/>
             <input  className="border border-black-400 rounded-3xl mb-8 hover:bg-slate-100 p-2 " type="password" placeholder="🔒Confirm Password" onChange={handleChange} name="confirmpassword"/>
-            <button
-  type="button"
-  className="text-pink-500 hover:text-pink-700"
+            <button type="button"
   onClick={handleSendOtp}
+  disabled={resendTimer > 0}
+  className={`px-4 py-2 rounded text-blue-500 ${
+    resendTimer > 0 ? 'text-gray-400 cursor-not-allowed' : 'text-blue-600 hover:text-blue-900'
+  }`}
 >
-  Send OTP
+  {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Send OTP'}
 </button>
             {otpSent && (
   <input
