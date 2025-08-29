@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://guest-room-booking-hall2-production.up.railway.app/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://guest-room-booking-hall2-vcyn.onrender.com/api/:path*" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
