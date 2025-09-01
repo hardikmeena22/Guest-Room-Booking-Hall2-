@@ -20,17 +20,35 @@ export default function ResetPassword() {
   return (
     <div className="max-w-md mx-auto mt-10 p-4 border rounded">
       <h2 className="text-xl mb-4">Set new password</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2 mb-3"
-        />
-        <button type="submit" className="w-full bg-green-600 text-white p-2">Reset Password</button>
-      </form>
-      {message && <p className="mt-2 text-center">{message}</p>}
+  
+      {!message.includes("successfully") ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="password"
+            placeholder="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border p-2 mb-3"
+          />
+          <button type="submit" className="w-full bg-green-600 text-white p-2">
+            Reset Password
+          </button>
+        </form>
+      ) : (
+        <div className="text-center">
+          <p className="text-green-600 font-semibold mb-4">{message}</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-blue-500 text-white px-6 py-2 rounded-xl hover:bg-blue-600 transition"
+          >
+            Login
+          </button>
+        </div>
+      )}
+  
+      {message && !message.includes("successfully") && (
+        <p className="mt-2 text-center text-red-500">{message}</p>
+      )}
     </div>
-  );
-}
+  )
+      }

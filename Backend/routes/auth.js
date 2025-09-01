@@ -12,8 +12,8 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "https://guest-room-booking-hal
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.OTP_EMAIL,
+    pass: process.env.OTP_PASSWORD,
   },
 });
 

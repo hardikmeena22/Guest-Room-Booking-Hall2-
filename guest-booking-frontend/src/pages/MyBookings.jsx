@@ -14,14 +14,24 @@ export default function MyBookings() {
         const res = await axios.get(`${backendURL}/api/booking/user`, {
           headers: {
             Authorization: `Bearer ${token}`
-      }});
-        setBookings(res.data);
+          }
+        });
+  
+        // ✅ Filter out bookings whose end_date has passed
+        const today = new Date();
+        const validBookings = res.data.filter(
+          (b) => new Date(b.end_date) >= today
+        );
+  
+        setBookings(validBookings);
+  
       } catch (err) {
         console.error("❌ Error fetching bookings:", err);
       }
     };
     fetchBookings();
   }, [token]);
+  
   const handleCancelBooking = async (id) => {
     if (!window.confirm("Are you sure you want to cancel this booking?")) return;
   
