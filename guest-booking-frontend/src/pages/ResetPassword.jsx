@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function ResetPassword() {
   const { token } = useParams();
+  const navigate = useNavigate();   // ✅ you were missing this line
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
@@ -50,5 +51,5 @@ export default function ResetPassword() {
         <p className="mt-2 text-center text-red-500">{message}</p>
       )}
     </div>
-  )
-      }
+  );
+}

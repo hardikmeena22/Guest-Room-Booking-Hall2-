@@ -4,8 +4,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 
-app.use(cors());
-app.options('*', cors())
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://guest-room-booking-hall2-git-main-hardiks-projects-51432f4f.vercel.app"
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
