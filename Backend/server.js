@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 const allowedOrigins = [
+  "http://localhost:5173",
   "http://localhost:3000",
   "https://guest-room-booking-hall2-git-main-hardiks-projects-51432f4f.vercel.app"
 ];

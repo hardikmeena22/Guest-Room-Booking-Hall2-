@@ -17,10 +17,8 @@ export default function Login(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const res = await axios.post(`${backendURL}/api/auth/login`, {
-                email: formData.email,
-                password: formData.password
-            })
+            const res = await axios.post(`${backendURL}/api/auth/login`,  { email: formData.email, password: formData.password },
+            { withCredentials: true })
 
             localStorage.setItem("token", res.data.token)
             toast.success('User Login successful!')
